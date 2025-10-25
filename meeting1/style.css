@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+
+.box{
+
+    background-color: aqua;
+}
+
+.child-box{
+    /* width: 50px; */
+    /* height: 50px; */
+    aspect-ratio: 1/1;
+    background-color: red;
+    margin: 4px;
+}
