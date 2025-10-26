@@ -54,8 +54,33 @@ const purchase = async (planId, clientId) => {
   return { success: true, code: stock.code, newInvoice };
 };
 
+// 5️⃣ GET /plans/:id/stock
+//    ➤ Purpose: Show stock summary for a single plan (ready/sold/error counts).
+//    ➤ Response Example:
+//        { planId, planName, ready, sold, error }
+
+const getPlanStock = async (planId) => {
+  // Get stock counts for the plan
+  const { rows } = await db.query(
+    `SELECT 
+       plan.id AS "planId",
+       plan.name AS "planName",
+       COUNT(CASE WHEN stock.state='ready' THEN 1 END) AS ready,
+       COUNT(CASE WHEN stock.state='sold' THEN 1 END) AS sold,
+       COUNT(CASE WHEN stock.state='error' THEN 1 END) AS error
+     FROM plan
+     LEFT JOIN stock ON stock.plan_id = plan.id
+     WHERE plan.id = $1
+     GROUP BY plan.id`,
+    [planId]
+  );
+
+  return rows[0] || { planId, planName: null, ready: 0, sold: 0, error: 0 };
+};
+
 module.exports = {
   getPlans,
   getPlanById,
   purchase,
+  getPlanStock,
 };

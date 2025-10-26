@@ -36,5 +36,32 @@ router.post("/purchase", clientAuth, async (req, res) => {
     res.status(500).send({ message: "اكو مشكله بالدنيا..." });
   }
 });
+//
+// 4️⃣ GET /plans
+//    ➤ Purpose: Return all available plans.
+router.get("/", async (req, res) => {
+  try {
+    const results = await getPlans();
+    res.send(results);
+  } catch (error) {
+    res.status(500).send({ message: "An issue found" });
+  }
+});
+
+// 5️⃣ GET /plans/:id/stock
+//    ➤ Purpose: Show stock summary for a single plan (ready/sold/error counts).
+//    ➤ Response Example:
+//        { planId, planName, ready, sold, error }
+router.get("/:id/stock", async (req, res) => {
+  try {
+    const planId = parseInt(req.params.id);
+    const stockSummary = await getPlanStock(planId);
+    res.send(stockSummary);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "اكو مشكله بالدنيا..." });
+  }
+});
+
 
 module.exports = router;
