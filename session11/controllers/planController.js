@@ -60,7 +60,6 @@ const purchase = async (planId, clientId) => {
 //        { planId, planName, ready, sold, error }
 
 const getPlanStock = async (planId) => {
-  // Get stock counts for the plan
   const { rows } = await db.query(
     `SELECT 
        plan.id AS "planId",
